@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MENÚ DE QUEENCY</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('fondo.png');
+      background-size: cover;
+      padding: 0;
+      margin: 0;
+    }
+    header {
+      background: #ff2454;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.5em;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px #00000020;
+      padding: 20px;
+    }
+    h2 {
+      color: #e65100;
+      margin-bottom: 10px;
+    }
+    .menu-section {
+      margin-bottom: 30px;
+    }
+    .menu-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: flex-start;
+    }
+    .menu-item {
+      background: #fffde7;
+      border: 1px solid #ffe082;
+      border-radius: 10px;
+      padding: 10px;
+      width: 180px;
+      text-align: center;
+      box-shadow: 0 2px 4px #00000010;
+      position: relative;
+    }
+    .menu-item img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .menu-item h4 {
+      margin: 10px 0 5px;
+      color: #333;
+    }
+    .menu-item strong {
+      color: #ff2454;
+    }
+    .options, select, button {
+      margin-top: 5px;
+      font-size: 0.9em;
+    }
+    button, select {
+      background: #ffb300;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    button:active {
+      background: #e65100;
+    }
+    .order-summary {
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .contact {
+      background: #ffe0b2;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .contact a {
+      color: #ff2454;
+      text-decoration: none;
+    }
+    .contact a:hover {
+      text-decoration: underline;
+    }
+    .counter {
+      font-weight: bold;
+      margin: 0 5px;
+    }
+    .out-of-stock {
+      background: rgba(255, 0, 0, 0.5);
+      color: white;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    .nav-drawer {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+    }
+    .nav-drawer a, .nav-drawer button {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 20px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+    }
+    .nav-drawer a:hover, .nav-drawer button:hover {
+      color: #f1f1f1;
+    }
+    .nav-drawer .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+    .login-section {
+      display: none;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      margin: 20px;
+    }
+    .crud-section {
+      display: none;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      margin: 20px;
+    }
+    @media (max-width: 768px) {
+      .menu-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+      .menu-item {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="navDrawer" class="nav-drawer">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <button onclick="showLogin()">Iniciar Sesión</button>
+    <div id="adminOptions" style="display: none;">
+      <button onclick="showCrud()">Gestionar Platos</button>
+      <button onclick="logout()">Cerrar Sesión</button>
+    </div>
+  </div>
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">☰</span>
+
+  <header>
+    <center>
+      <img src="icon.png" alt="Logo" width="100" height="100" align="middle">
+      <span style="font-size: 40px; font-weight: bold; color: white;">MENÚ DE QUEENCY</span>
+    </center>
+  </header>
+
+  <div class="container">
+    <div id="loginSection" class="login-section">
+      <h2>Iniciar Sesión</h2>
+      <input type="text" id="username" placeholder="Usuario"><br>
+      <input type="password" id="password" placeholder="Contraseña"><br>
+      <button onclick="login()">Iniciar Sesión</button>
+    </div>
+
+    <div id="crudSection" class="crud-section">
+      <h2>Gestionar Platos</h2>
+      <h3>Agregar Plato</h3>
+      <input type="text" id="newDishName" placeholder="Nombre del plato"><br>
+      <input type="number" id="newDishPrice" placeholder="Precio (Bs)"><br>
+      <input type="text" id="newDishImg" placeholder="URL de la imagen"><br>
+      <select id="newDishType">
+        <option value="pollo">Pollo</option>
+        <option value="pipoca">Pipoca</option>
+        <option value="refresco">Refresco</option>
+      </select><br>
+      <button onclick="addDish()">Agregar Plato</button>
+      <h3>Lista de Platos</h3>
+      <div id="dishList"></div>
+    </div>
+
+    <div class="menu-section">
+      <h2>MENU DE POLLOS</h2>
+      <div class="menu-grid" id="pollo-menu"></div>
+    </div>
+
+    <div class="menu-section">
+      <h2>MENU DE PIPOCAS</h2>
+      <div class="menu-grid" id="pipoca-menu"></div>
+    </div>
+
+    <div class="menu-section">
+      <h2>MENU DE REFRESCOS</h2>
+      <div class="menu-grid" id="refresco-menu"></div>
+    </div>
+
+    <div class="order-summary" id="order-summary">
+      <h3>RESUMEN DE SU PEDIDO</h3>
+      <div id="order-items"></div>
+      <div><strong>TOTAL: Bs <span id="order-total">0</span></strong></div>
+      <button onclick="realizarPedido()">REALIZAR PEDIDO Y PAGAR</button>
+      <div id="qr-code" style="margin-top:15px;"></div>
+    </div>
+
+    <div class="contact">
+      <h3>CONTACTA PARA PEDIDOS DELIVERY</h3>
+      <p>
+        <a href="tel:+59176153543">📞 Llamar: +591 7 615 3543</a>
+      </p>
+      <p>
+        <a href="https://wa.me/59176153543" target="_blank">💬 WhatsApp </a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    let pollos = JSON.parse(localStorage.getItem('pollos')) || [
+      { nombre: "Pollo frito simple", precio: 19, img: "1.jpeg", outOfStock: false },
+      { nombre: "Pollo frito doble", precio: 35, img: "2.jpeg", outOfStock: false },
+      { nombre: "Pollo a la canasta", precio: 29, img: "3.jpg", outOfStock: false },
+      { nombre: "Pollo ahumado", precio: 19, img: "4.jpeg", outOfStock: false }
+    ];
+    let pipocas = JSON.parse(localStorage.getItem('pipocas')) || [
+      { nombre: "Pipocas + refresco", precio: 29, img: "5.png", outOfStock: false }
+    ];
+    let refrescos = JSON.parse(localStorage.getItem('refrescos')) || [
+      { nombre: "Mini coca cola", precio: 3, img: "11.jpg", outOfStock: false },
+      { nombre: "Popular", precio: 8, img: "12.jpg", outOfStock: false },
+      { nombre: "Coca Cola 1/2 l.", precio: 12, img: "13.jpg", outOfStock: false },
+      { nombre: "Coca Cola 2l.", precio: 18, img: "14.jpg", outOfStock: false },
+      { nombre: "Coca Cola 3l.", precio: 23, img: "15.jpg", outOfStock: false },
+      { nombre: "Jugo del Valle", precio: 20, img: "16.jpg", outOfStock: false },
+      { nombre: "Mini Jugo del Valle", precio: 7, img: "17.jpg", outOfStock: false }
+    ];
+    const acompanamientos = [
+      { nombre: "Arroz y papa", value: "arroz_papa" },
+      { nombre: "Pura papa", value: "papa" }
+    ];
+    const acompañado = [
+      { nombre: "pierna", value: "Pierna" },
+      { nombre: "pecho", value: "pecho" },
+      { nombre: "ala", value: "ala" },
+      { nombre: "entre pierna", value: "entre_pierna" }
+    ];
+    let pedido = [];
+    let isLoggedIn = false;
+
+    function openNav() {
+      document.getElementById("navDrawer").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("navDrawer").style.width = "0";
+    }
+
+    function showLogin() {
+      document.getElementById("loginSection").style.display = "block";
+      document.getElementById("crudSection").style.display = "none";
+      closeNav();
+    }
+
+    function showCrud() {
+      if (isLoggedIn) {
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("crudSection").style.display = "block";
+        renderDishList();
+        closeNav();
+      } else {
+        alert("Por favor, inicia sesión primero.");
+        showLogin();
+      }
+    }
+
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      if (username === "queency pollo" && password === "polloqueency409876pollo") {
+        isLoggedIn = true;
+        document.getElementById("adminOptions").style.display = "block";
+        document.getElementById("loginSection").style.display = "none";
+        alert("Inicio de sesión exitoso");
+      } else {
+        alert("Usuario o contraseña incorrectos");
+      }
+    }
+
+    function logout() {
+      isLoggedIn = false;
+      document.getElementById("adminOptions").style.display = "none";
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("crudSection").style.display = "none";
+      closeNav();
+    }
+
+    function addDish() {
+      const name = document.getElementById("newDishName").value;
+      const price = parseFloat(document.getElementById("newDishPrice").value);
+      const img = document.getElementById("newDishImg").value;
+      const type = document.getElementById("newDishType").value;
+      if (name && price && img) {
+        const newDish = { nombre: name, precio: price, img: img, outOfStock: false };
+        if (type === "pollo") {
+          pollos.push(newDish);
+          localStorage.setItem('pollos', JSON.stringify(pollos));
+        } else if (type === "pipoca") {
+          pipocas.push(newDish);
+          localStorage.setItem('pipocas', JSON.stringify(pipocas));
+        } else {
+          refrescos.push(newDish);
+          localStorage.setItem('refrescos', JSON.stringify(refrescos));
+        }
+        renderMenus();
+        renderDishList();
+        document.getElementById("newDishName").value = "";
+        document.getElementById("newDishPrice").value = "";
+        document.getElementById("newDishImg").value = "";
+        alert("Plato agregado exitosamente");
+      } else {
+        alert("Por favor, completa todos los campos.");
+      }
+    }
+
+    function editDish(type, idx) {
+      const newName = prompt("Nuevo nombre:", type === 'pollo' ? pollos[idx].nombre : type === 'pipoca' ? pipocas[idx].nombre : refrescos[idx].nombre);
+      const newPrice = prompt("Nuevo precio:", type === 'pollo' ? pollos[idx].precio : type === 'pipoca' ? pipocas[idx].precio : refrescos[idx].precio);
+      const newImg = prompt("Nueva URL de imagen:", type === 'pollo' ? pollos[idx].img : type === 'pipoca' ? pipocas[idx].img : refrescos[idx].img);
+      if (newName && newPrice && newImg) {
+        if (type === 'pollo') {
+          pollos[idx] = { ...pollos[idx], nombre: newName, precio: parseFloat(newPrice), img: newImg };
+          localStorage.setItem('pollos', JSON.stringify(pollos));
+        } else if (type === 'pipoca') {
+          pipocas[idx] = { ...pipocas[idx], nombre: newName, precio: parseFloat(newPrice), img: newImg };
+          localStorage.setItem('pipocas', JSON.stringify(pipocas));
+        } else {
+          refrescos[idx] = { ...refrescos[idx], nombre: newName, precio: parseFloat(newPrice), img: newImg };
+          localStorage.setItem('refrescos', JSON.stringify(refrescos));
+        }
+        renderMenus();
+        renderDishList();
+        alert("Plato actualizado exitosamente");
+      }
+    }
+
+    function deleteDish(type, idx) {
+      if (confirm("¿Seguro que quieres eliminar este plato?")) {
+        if (type === 'pollo') {
+          pollos.splice(idx, 1);
+          localStorage.setItem('pollos', JSON.stringify(pollos));
+        } else if (type === 'pipoca') {
+          pipocas.splice(idx, 1);
+          localStorage.setItem('pipocas', JSON.stringify(pipocas));
+        } else {
+          refrescos.splice(idx, 1);
+          localStorage.setItem('refrescos', JSON.stringify(refrescos));
+        }
+        renderMenus();
+        renderDishList();
+        alert("Plato eliminado exitosamente");
+      }
+    }
+
+    function toggleOutOfStock(type, idx) {
+      if (type === 'pollo') {
+        pollos[idx].outOfStock = !pollos[idx].outOfStock;
+        localStorage.setItem('pollos', JSON.stringify(pollos));
+      } else if (type === 'pipoca') {
+        pipocas[idx].outOfStock = !pipocas[idx].outOfStock;
+        localStorage.setItem('pipocas', JSON.stringify(pipocas));
+      } else {
+        refrescos[idx].outOfStock = !refrescos[idx].outOfStock;
+        localStorage.setItem('refrescos', JSON.stringify(refrescos));
+      }
+      renderMenus();
+      renderDishList();
+    }
+
+    function renderDishList() {
+      const dishList = document.getElementById("dishList");
+      dishList.innerHTML = "";
+      pollos.forEach((pollo, idx) => {
+        dishList.innerHTML += `
+          <div>
+            ${pollo.nombre} (Pollo) - Bs ${pollo.precio} ${pollo.outOfStock ? '(Agotado)' : ''}
+            <button onclick="editDish('pollo', ${idx})">Editar</button>
+            <button onclick="deleteDish('pollo', ${idx})">Eliminar</button>
+            <button onclick="toggleOutOfStock('pollo', ${idx})">${pollo.outOfStock ? 'Marcar Disponible' : 'Marcar Agotado'}</button>
+          </div>`;
+      });
+      pipocas.forEach((pipoca, idx) => {
+        dishList.innerHTML += `
+          <div>
+            ${pipoca.nombre} (Pipoca) - Bs ${pipoca.precio} ${pipoca.outOfStock ? '(Agotado)' : ''}
+            <button onclick="editDish('pipoca', ${idx})">Editar</button>
+            <button onclick="deleteDish('pipoca', ${idx})">Eliminar</button>
+            <button onclick="toggleOutOfStock('pipoca', ${idx})">${pipoca.outOfStock ? 'Marcar Disponible' : 'Marcar Agotado'}</button>
+          </div>`;
+      });
+      refrescos.forEach((refresco, idx) => {
+        dishList.innerHTML += `
+          <div>
+            ${refresco.nombre} (Refresco) - Bs ${refresco.precio} ${refresco.outOfStock ? '(Agotado)' : ''}
+            <button onclick="editDish('refresco', ${idx})">Editar</button>
+            <button onclick="deleteDish('refresco', ${idx})">Eliminar</button>
+            <button onclick="toggleOutOfStock('refresco', ${idx})">${refresco.outOfStock ? 'Marcar Disponible' : 'Marcar Agotado'}</button>
+          </div>`;
+      });
+    }
+
+    function renderMenus() {
+      const polloMenu = document.getElementById('pollo-menu');
+      polloMenu.innerHTML = '';
+      pollos.forEach((pollo, idx) => {
+        const div = document.createElement('div');
+        div.className = "menu-item";
+        div.innerHTML = `
+          <img src="${pollo.img}" alt="${pollo.nombre}">
+          <h4>${pollo.nombre}</h4>
+          <strong>Bs ${pollo.precio}</strong><br>
+          ${pollo.outOfStock ? '<div class="out-of-stock">Agotado</div>' : `
+            <select id="acom-${idx}">
+              ${acompanamientos.map(a => `<option value="${a.value}">${a.nombre}</option>`).join('')}
+            </select>
+            <select id="acomp-${idx}">
+              ${acompañado.map(a => `<option value="${a.value}">${a.nombre}</option>`).join('')}
+            </select>
+            <button onclick="addPollo(${idx})">Agregar</button>
+          `}
+        `;
+        polloMenu.appendChild(div);
+      });
+
+      const pipocaMenu = document.getElementById('pipoca-menu');
+      pipocaMenu.innerHTML = '';
+      pipocas.forEach((pipoca, idx) => {
+        const div = document.createElement('div');
+        div.className = "menu-item";
+        div.innerHTML = `
+          <img src="${pipoca.img}" alt="${pipoca.nombre}">
+          <h4>${pipoca.nombre}</h4>
+          <strong>Bs ${pipoca.precio}</strong><br>
+          ${pipoca.outOfStock ? '<div class="out-of-stock">Agotado</div>' : `<button onclick="addPipoca(${idx})">Agregar</button>`}
+        `;
+        pipocaMenu.appendChild(div);
+      });
+
+      const refrescoMenu = document.getElementById('refresco-menu');
+      refrescoMenu.innerHTML = '';
+      refrescos.forEach((refresco, idx) => {
+        const div = document.createElement('div');
+        div.className = "menu-item";
+        div.innerHTML = `
+          <img src="${refresco.img}" alt="${refresco.nombre}">
+          <h4>${refresco.nombre}</h4>
+          <strong>Bs ${refresco.precio}</strong><br>
+          ${refresco.outOfStock ? '<div class="out-of-stock">Agotado</div>' : `<button onclick="addRefresco(${idx})">Agregar</button>`}
+        `;
+        refrescoMenu.appendChild(div);
+      });
+    }
+
+    window.addPollo = function(idx) {
+      if (pollos[idx].outOfStock) return;
+      const acomp = document.getElementById(`acom-${idx}`).value;
+      const piece = document.getElementById(`acomp-${idx}`).value;
+      const key = `pollo-${idx}-${acomp}-${piece}`;
+      const found = pedido.find(item => item.key === key);
+      if (found) found.cantidad++;
+      else pedido.push({ key, tipo: 'pollo', nombre: pollos[idx].nombre, precio: pollos[idx].precio, acomp: acompanamientos.find(a => a.value === acomp).nombre, piece: acompañado.find(a => a.value === piece).nombre, cantidad: 1 });
+      renderPedido();
+    };
+
+    window.addPipoca = function(idx) {
+      if (pipocas[idx].outOfStock) return;
+      const key = `pipoca-${idx}`;
+      const found = pedido.find(item => item.key === key);
+      if (found) found.cantidad++;
+      else pedido.push({ key, tipo: 'pipoca', nombre: pipocas[idx].nombre, precio: pipocas[idx].precio, cantidad: 1 });
+      renderPedido();
+    };
+
+    window.addRefresco = function(idx) {
+      if (refrescos[idx].outOfStock) return;
+      const key = `refresco-${idx}`;
+      const found = pedido.find(item => item.key === key);
+      if (found) found.cantidad++;
+      else pedido.push({ key, tipo: 'refresco', nombre: refrescos[idx].nombre, precio: refrescos[idx].precio, cantidad: 1 });
+      renderPedido();
+    };
+
+    window.editOrderItem = function(idx) {
+      const item = pedido[idx];
+      if (item.tipo === 'pollo') {
+        const newAcomp = prompt("Seleccione acompañamiento (Arroz y papa, Pura papa):", item.acomp);
+        const newPiece = prompt("Seleccione pieza (pierna, pecho, ala, entre pierna):", item.piece);
+        const validAcomp = acompanamientos.find(a => a.nombre === newAcomp);
+        const validPiece = acompañado.find(a => a.nombre === newPiece);
+        if (validAcomp && validPiece) {
+          const newKey = `pollo-${item.key.split('-')[1]}-${validAcomp.value}-${validPiece.value}`;
+          const existing = pedido.find(i => i.key === newKey && i !== item);
+          if (existing) {
+            existing.cantidad += item.cantidad;
+            pedido.splice(idx, 1);
+          } else {
+            item.key = newKey;
+            item.acomp = validAcomp.nombre;
+            item.piece = validPiece.nombre;
+          }
+        } else {
+          alert("Acompañamiento o pieza inválidos.");
+          return;
+        }
+      } else {
+        alert("Solo los pollos pueden editarse con acompañamientos y piezas.");
+        return;
+      }
+      renderPedido();
+    };
+
+    function renderPedido() {
+      const orderItems = document.getElementById('order-items');
+      orderItems.innerHTML = '';
+      let total = 0;
+      pedido.forEach((item, idx) => {
+        let desc = item.nombre;
+        if (item.tipo === 'pollo') desc += ` (${item.acomp}, ${item.piece})`;
+        orderItems.innerHTML += `
+          <div>
+            ${desc} x <span class="counter">${item.cantidad}</span>
+            <button onclick="removeItem(${idx})">-</button>
+            <button onclick="editOrderItem(${idx})">Editar</button>
+            <span>Bs ${item.precio * item.cantidad}</span>
+          </div>`;
+        total += item.precio * item.cantidad;
+      });
+      document.getElementById('order-total').textContent = total;
+    }
+
+    window.removeItem = function(idx) {
+      if (pedido[idx].cantidad > 1) pedido[idx].cantidad--;
+      else pedido.splice(idx, 1);
+      renderPedido();
+    };
+
+    function realizarPedido() {
+      let mensaje = "📦 *Pedido Pollería*:%0A";
+      let total = 0;
+      pedido.forEach(item => {
+        let desc = `${item.nombre} x ${item.cantidad}`;
+        if (item.tipo === 'pollo') desc += ` (${item.acomp}, ${item.piece})`;
+        mensaje += `• ${desc} - Bs ${item.precio * item.cantidad}%0A`;
+        total += item.precio * item.cantidad;
+      });
+      mensaje += `%0A🔢 Total: Bs ${total}`;
+      const url = "https://wa.me/59176153543?text=" + mensaje;
+      document.getElementById("qr-code").innerHTML = `
+        <img src="1qr.jpg" width="310" height="280" alt="Código QR"><br>
+        <a href="${url}" target="_blank"
+          style="display:inline-block;margin-top:10px;background:#25D366;color:#fff;padding:8px 12px;border-radius:6px;text-decoration:none;">
+          Enviar por WhatsApp
+        </a>`;
+    }
+
+    renderMenus();
+  </script>
+</body>
+</html>
